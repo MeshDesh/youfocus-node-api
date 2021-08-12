@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "lib": ["es6"],
+    "allowJs": true,
+    "outDir": "build",
+    "strict": true,
+    "sourceMap": true,
+    "target": "ES6",
+    "noImplicitAny": false,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "types": ["node", "jest"],
+    "typeRoots": ["./node_modules/@types"]
+  },
+  "compileOnSave": true,
+  "include": ["src/**/*"],
+  "exclude": ["src/**/*.spec.ts", "node_modules", "src/__test__"],
+  "files": ["node_modules/typescript/lib/lib.es6.d.ts"]
+}
