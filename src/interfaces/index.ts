@@ -6,3 +6,4 @@ export interface TestUser {
 export interface TestUsersList {
   users: Array<TestUser>;
 }
+
