@@ -3,6 +3,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import BodyParser from 'body-parser';
 import indexRouter from './routes';
+import configEnv from './config';
 
 const app = express();
 
@@ -14,5 +15,4 @@ app.use(morgan('combined'));
 
 // Routes
 app.use('/api/v1/', indexRouter);
-
 export default app;

@@ -1,9 +1,2 @@
-export interface TestUser {
-  name: string;
-  age: number;
-}
-
-export interface TestUsersList {
-  users: Array<TestUser>;
-}
-
+export * from './feedback'
+export * from './database'
