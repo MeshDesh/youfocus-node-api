@@ -1,14 +1,15 @@
-import { Request, response, Response } from 'express';
+import { Request, Response } from 'express';
 import { addFeedbackToDatabase } from '../database-modules';
 import { feedbackModel } from '../interfaces';
 import { getPlaylist, getPlaylistId } from '../utils';
+import { errorResponse, successResponse } from '../utils/response';
 
 // 1. Get status of the API
 export const getStatus = async (
-  request: Request,
-  response: Response,
+  req: Request,
+  res: Response,
 ): Promise<void> => {
-  response.status(200).json({
+  res.status(200).json({
     status: true,
   });
 };
@@ -21,34 +22,19 @@ export const getPlaylistItems = async (
   const { url, pageToken } = req.body;
   var playlistId = getPlaylistId(url);
   if (!playlistId) {
-    res
-      .status(404)
-      .json({
-        message:
-          'The provided playlist url is wrong. please try again with a different url',
-      });
+    res.send(errorResponse(404, 'Invalid Playlist ID'))
   }
   getPlaylist(playlistId, pageToken)
     .then(result => {
       if (result.err) {
-        res.status(404).json({
-          status: false,
-          error: 'No such playlist found!',
-          payload: result,
-        });
+        res.send(errorResponse(404, 'No such playlist found'));
       } else {
-        res.status(200).json({
-          status: true,
-          payload: result,
-        });
+        res.send(successResponse(result));
       }
     })
     .catch(err => {
-      res.status(404).json({
-        status: false,
-        error: 'No such playlist found!',
-        payload: err,
-      });
+      console.log(err)
+      res.send(errorResponse(404, 'Whoops some error occured!'))
     });
 };
 
@@ -70,16 +56,10 @@ export const postFeedback = async (
 
   addFeedbackToDatabase(feedbackData)
     .then(result => {
-      res.status(200).json({
-        status: true,
-        payload: result,
-      });
+      res.send(successResponse(result));
     })
     .catch(err => {
-      response.status(400).json({
-        status: false,
-        error: 'Whoops! Something went wrong.',
-        payload: err,
-      });
+      console.log(err)
+      res.send(errorResponse(404, 'Whoops some error occured!'))
     });
 };
