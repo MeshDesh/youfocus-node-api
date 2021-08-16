@@ -1,4 +1,4 @@
-export * from './feedback/feedback'
+export * from './feedback'
 
 
 

@@ -13,63 +13,67 @@ export const getStatus = async (
   });
 };
 
-
-//2.Get Playlist Items 
-export const getPlaylistItems = async(
+//2.Get Playlist Items
+export const getPlaylistItems = async (
   req: Request,
   res: Response,
-):Promise<void> => {
-  const {url} = req.body;
-  var id = getPlaylistId(url);
-  if(id === 0){
-    res.status(404).json({message: 'The provided playlist url is wrong. please try again with a different url'})
+): Promise<void> => {
+  const { url, pageToken } = req.body;
+  var playlistId = getPlaylistId(url);
+  if (!playlistId) {
+    res
+      .status(404)
+      .json({
+        message:
+          'The provided playlist url is wrong. please try again with a different url',
+      });
   }
-  getPlaylist(id)
+  getPlaylist(playlistId, pageToken)
     .then(result => {
-      if(result.err){
+      if (result.err) {
         res.status(404).json({
           status: false,
           error: 'No such playlist found!',
           payload: result,
-        })
-      }else{
+        });
+      } else {
         res.status(200).json({
           status: true,
           payload: result,
-        })
-      } 
+        });
+      }
     })
-    .catch((err) => {
+    .catch(err => {
       res.status(404).json({
         status: false,
         error: 'No such playlist found!',
         payload: err,
-      })
-    })
-}
+      });
+    });
+};
 
 //2. Post Feedback to DB
-export const postFeedback = async(
+export const postFeedback = async (
   req: Request,
   res: Response,
-):Promise<void> => {
-  const {email, rating, feedbackMessage} = req.body;
-  
+): Promise<void> => {
+  const { email, rating, feedbackMessage } = req.body;
+
   let feedbackData = {} as feedbackModel;
-  
+
   feedbackData = {
     email,
     rating: rating as Number,
     feedbackMessage,
-    addedOn: new Date(Date.now())
-  } as feedbackModel
+    addedOn: new Date(Date.now()),
+  } as feedbackModel;
 
   addFeedbackToDatabase(feedbackData)
     .then(result => {
       res.status(200).json({
         status: true,
         payload: result,
-      })
+      });
     })
     .catch(err => {
       response.status(400).json({
@@ -77,6 +81,5 @@ export const postFeedback = async(
         error: 'Whoops! Something went wrong.',
         payload: err,
       });
-    })
-}
-
+    });
+};
