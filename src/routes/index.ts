@@ -4,7 +4,7 @@ import {getPlaylistItems, getStatus, postFeedback } from '../controllers';
 const indexRouter = Router();
 
 indexRouter.route('/test').get(getStatus);
-indexRouter.route('/playlistItems').post(getPlaylistItems);
-indexRouter.route('/user-feedback').post(postFeedback);
+indexRouter.route('/playlist').post(getPlaylistItems);
+indexRouter.route('/feedback').post(postFeedback);
 
 export default indexRouter;

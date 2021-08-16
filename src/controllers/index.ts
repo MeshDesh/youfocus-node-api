@@ -26,11 +26,7 @@ export const getPlaylistItems = async (
   }
   getPlaylist(playlistId, pageToken)
     .then(result => {
-      if (result.err) {
-        res.send(errorResponse(404, 'No such playlist found'));
-      } else {
-        res.send(successResponse(result));
-      }
+      res.send(successResponse(result));
     })
     .catch(err => {
       console.log(err)

@@ -12,7 +12,6 @@ app.use(express.json({ limit: '50mb' }));
 app.use(BodyParser.urlencoded({ extended: true }));
 app.use(BodyParser.json());
 app.use(morgan('combined'));
-console.log(configEnv.YOUTUBE_API_KEY)
 // Routes
 app.use('/api/v1/', indexRouter);
 export default app;

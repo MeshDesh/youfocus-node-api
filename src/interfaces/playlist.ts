@@ -1,13 +1,17 @@
-export interface videoModel{
-    id:string,
-    title:string,
-    channelName:string,
-    thumbnailUrl:string,
+export interface VideoModel{
+    id: string | null | undefined,
+    title: string | null | undefined,
+    thumbnail: Object | null | undefined,
 }
-export interface playlistModel{
+
+export interface PlaylistModel{
     playlistId:string,
     nextPageToken?:string,
     prevPageToken?:string,
-    items:Array<videoModel>,
-    playlistMeta: Object
+    items:Array<VideoModel>,
+    channelName:string,
+    playlistMeta: {
+        totalResults: number,
+        resultsPerPage: number
+    }
 }
