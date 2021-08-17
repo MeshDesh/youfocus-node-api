@@ -6,40 +6,40 @@ import { errorResponse, successResponse } from '../utils/response';
 
 // 1. Get status of the API
 export const getStatus = async (
-  req: Request,
-  res: Response,
+  request: Request,
+  response: Response,
 ): Promise<void> => {
-  res.status(200).json({
+  response.status(200).json({
     status: true,
   });
 };
 
 //2.Get Playlist Items
 export const getPlaylistItems = async (
-  req: Request,
-  res: Response,
+  request: Request,
+  response: Response,
 ): Promise<void> => {
-  const { url, pageToken } = req.body;
+  const { url, pageToken } = request.body;
   var playlistId = getPlaylistId(url);
   if (!playlistId) {
-    res.send(errorResponse(404, 'Invalid Playlist ID'))
+    response.send(errorResponse(404, 'Invalid Playlist ID'))
   }
-  getPlaylist(playlistId, pageToken)
+  getPlaylist(playlistId!, pageToken!)
     .then(result => {
-      res.send(successResponse(result));
+      response.send(successResponse(result));
     })
     .catch(err => {
       console.log(err)
-      res.send(errorResponse(404, 'Whoops some error occured!'))
+      response.send(errorResponse(404, 'Whoops some error occured!'))
     });
 };
 
 //2. Post Feedback to DB
 export const postFeedback = async (
-  req: Request,
-  res: Response,
+  request: Request,
+  response: Response,
 ): Promise<void> => {
-  const { email, rating, feedbackMessage } = req.body;
+  const { email, rating, feedbackMessage } = request.body;
 
   let feedbackData = {} as feedbackModel;
 
@@ -52,10 +52,10 @@ export const postFeedback = async (
 
   addFeedbackToDatabase(feedbackData)
     .then(result => {
-      res.send(successResponse(result));
+      response.send(successResponse(result));
     })
     .catch(err => {
       console.log(err)
-      res.send(errorResponse(404, 'Whoops some error occured!'))
+      response.send(errorResponse(404, 'Whoops some error occured!'))
     });
 };

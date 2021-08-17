@@ -1,5 +1,5 @@
 import configEnv from "../config";
-import { PlaylistModel,VideoModel} from "../interfaces/playlist";
+import { PlaylistModel,VideoModel} from "../interfaces";
 import { google } from "googleapis";
 
 //youtube api config;
@@ -20,35 +20,38 @@ export const getPlaylistId = (url: string) => {
 }
 
 //Get playlist items
-export const getPlaylist = async (playlistId: string = '', pageToken: string = '') => {
+export const getPlaylist = async (playlistId: string, pageToken: string) => {
 
   let playlistData = {} as PlaylistModel
+  
   let videoData = {} as VideoModel
 
   return await youtube.playlistItems.list({
-    playlistId: playlistId,
+    playlistId,
     maxResults: 10,
     part: ['snippet', 'id'],
-    pageToken: pageToken
-  }).then(res => {
+    pageToken
+  }).then(response => {
+    const {pageInfo, prevPageToken, nextPageToken, items} = response.data;
     playlistData = {
       playlistId: playlistId,
-      playlistMeta: res.data.pageInfo,
-      nextPageToken: res.data.nextPageToken,
-      prevPageToken: res.data.prevPageToken,
-      items: res.data.items?.map((video) => {
+      playlistMeta: pageInfo,
+      nextPageToken: nextPageToken,
+      prevPageToken: prevPageToken,
+      items: items?.map((video) => {
+        const {snippet} = video;
         return videoData = {
-          id: video.snippet?.resourceId?.videoId,
-          title: video.snippet?.title,
-          thumbnail: video.snippet?.thumbnails?.default
+          id: snippet?.resourceId?.videoId,
+          title: snippet?.title,
+          thumbnail: snippet?.thumbnails?.default
         } as VideoModel
       })
     } as PlaylistModel
     return playlistData;
-  }).catch((err) => {
+  }).catch((error) => {
     return {
       message: 'There was an error',
-      err
+      error
     }
   })
 

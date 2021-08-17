@@ -7,9 +7,9 @@ export const addFeedbackToDatabase = async (feedbackData: feedbackModel): Promis
             return {
                 message: 'Feedback received. Thank you for using Youfocus!'
             }
-        }).catch((err) => {
+        }).catch((error) => {
             return {
-                err
+                error
             }
         })
 }
