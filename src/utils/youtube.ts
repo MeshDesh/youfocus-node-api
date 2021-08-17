@@ -54,6 +54,5 @@ export const getPlaylist = async (playlistId: string, pageToken: string) => {
       error
     }
   })
-
 }
 

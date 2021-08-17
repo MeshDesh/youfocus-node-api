@@ -23,15 +23,16 @@ export const getPlaylistItems = async (
   var playlistId = getPlaylistId(url);
   if (!playlistId) {
     response.send(errorResponse(404, 'Invalid Playlist ID'))
-  }
-  getPlaylist(playlistId!, pageToken!)
+  }else{
+    getPlaylist(playlistId!, pageToken!)
     .then(result => {
-      response.send(successResponse(result));
+        response.send(successResponse(result));
     })
-    .catch(err => {
-      console.log(err)
-      response.send(errorResponse(404, 'Whoops some error occured!'))
+      .catch(err => {
+        console.log(err)
+        response.send(errorResponse(404, 'Whoops some error occured!'))
     });
+  }
 };
 
 //2. Post Feedback to DB
