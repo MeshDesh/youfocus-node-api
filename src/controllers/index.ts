@@ -19,12 +19,14 @@ export const getPlaylistItems = async (
   request: Request,
   response: Response,
 ): Promise<void> => {
-  const { url, pageToken } = request.body;
-  var playlistId = getPlaylistId(url);
+  const { url, pageToken } = request.query;
+  console.log(url)
+  var playlistId = getPlaylistId(url as string);
+  console.log(pageToken)
   if (!playlistId) {
     response.send(errorResponse(404, 'Invalid Playlist ID'))
   }else{
-    getPlaylist(playlistId!, pageToken!)
+    getPlaylist(playlistId, pageToken as string)
     .then(result => {
         response.send(successResponse(result));
     })
