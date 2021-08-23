@@ -15,7 +15,7 @@
     "prettier-format:default": "prettier --config .prettierrc 'src/**/*.ts' --write",
     "prettier-watch": "run-script-os",
     "prettier-watch:win32": "onchange \"src/**/*.ts\" -- prettier --write {{changed}}",
-    "prettier-watch:darwin:linux": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
+    "pretier-watch:darwin:linux": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
     "prettier-watch:default": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
     "test": "NODE_ENV=development jest",
     "test:dev": "NODE_ENV=development jest --watchAll"

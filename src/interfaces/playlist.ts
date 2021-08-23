@@ -1,21 +1,32 @@
 export interface VideoModel {
     id: string,
     title: string,
-    thumbnail: {
-        url: string,
-        width: number,
-        height: number
-    }
+    thumbnail: string
 }
 
-export interface PlaylistModel {
-    playlistId: string,
+export interface Playlist{
+    playlistInfo: PlaylistInfo,
+    playlistData: PlaylistData
+}
+
+
+
+export interface PlaylistData {
     nextPageToken?: string,
     prevPageToken?: string,
-    items: Array<VideoModel>,
+    videos: Array<VideoModel>,
     channelName: string,
     playlistMeta: {
         totalResults: number,
         resultsPerPage: number
     }
+}
+
+export interface PlaylistInfo{
+    playlistId: string,
+    playlistName: string,
+    playlistItemCount: number,
+    playlistDescription: string,
+    playlistThumb: string,
+    channelName: string
 }

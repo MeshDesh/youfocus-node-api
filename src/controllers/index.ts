@@ -20,21 +20,21 @@ export const getPlaylistItems = async (
   response: Response,
 ): Promise<void> => {
   const { url, pageToken } = request.query;
-  console.log(url)
+
   var playlistId = getPlaylistId(url as string);
-  console.log(pageToken)
+
   if (!playlistId) {
-    response.send(errorResponse(404, 'Invalid Playlist ID'))
-  }else{
-    getPlaylist(playlistId, pageToken as string)
-    .then(result => {
-        response.send(successResponse(result));
-    })
-      .catch(err => {
-        console.log(err)
-        response.send(errorResponse(404, 'Whoops some error occured!'))
-    });
+    errorResponse(404, 'Invalid playlist ID', response)
+    return
   }
+  getPlaylist(playlistId, pageToken as string)
+    .then(result => {
+      successResponse(result, response)
+    })
+    .catch(err => {
+      console.log(err)
+      errorResponse(404, 'Some Error Occured', response)
+    });
 };
 
 //2. Post Feedback to DB
@@ -44,21 +44,19 @@ export const postFeedback = async (
 ): Promise<void> => {
   const { email, rating, feedbackMessage } = request.body;
 
-  let feedbackData = {} as feedbackModel;
-
-  feedbackData = {
+  let feedbackData = {
     email,
-    rating: rating as Number,
+    rating: parseInt(rating),
     feedbackMessage,
     addedOn: new Date(Date.now()),
   } as feedbackModel;
 
   addFeedbackToDatabase(feedbackData)
     .then(result => {
-      response.send(successResponse(result));
+      successResponse(result, response)
     })
     .catch(err => {
       console.log(err)
-      response.send(errorResponse(404, 'Whoops some error occured!'))
+      errorResponse(404, 'Some Error Occured', response)
     });
 };

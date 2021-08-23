@@ -1,5 +1,5 @@
 import configEnv from "../config";
-import { PlaylistModel, VideoModel } from "../interfaces";
+import { Playlist, PlaylistData, PlaylistInfo, VideoModel } from "../interfaces";
 import { google } from "googleapis";
 
 //youtube api config;
@@ -19,41 +19,76 @@ export const getPlaylistId = (url: string) => {
 
 }
 
-//Get playlist items
-export const getPlaylist = async (playlistId: string, pageToken: string) => {
+const getPlaylistInfo = async (playlistId: string) => {
+  return await youtube.playlists
+    .list({
+      id: [playlistId],
+      part: ['snippet', 'id'],
+    })
+    .then(response => {
+      const { items } = response.data;
 
-  let playlistData = {} as PlaylistModel
+      return {
+        playlistId,
+        playlistName: items![0].snippet?.title!,
+        playlistItemCount: items![0].contentDetails?.itemCount!,
+        playlistThumb: items![0].snippet?.thumbnails?.default?.url!,
+        playlistDescription: items![0].snippet?.description!,
+        channelName: items![0].snippet?.channelTitle!,
+      } as PlaylistInfo;
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
 
-  let videoData = {} as VideoModel
 
+const getPlaylistData = async (playlistId: string, pageToken: string) => {
   return await youtube.playlistItems.list({
     playlistId,
     part: ['snippet', 'id'],
     pageToken
-  }).then(response => {
+  }).then(async(response) => {
 
     const { pageInfo, prevPageToken, nextPageToken, items } = response.data;
 
-    playlistData = {
-      playlistId: playlistId,
+    return {
       playlistMeta: pageInfo,
       nextPageToken: nextPageToken,
       prevPageToken: prevPageToken,
-      items: items?.map((video) => {
+      videos: items?.map((video) => {
         const { snippet } = video;
-        return videoData = {
+        let videoData = {
           id: snippet?.resourceId?.videoId,
           title: snippet?.title,
-          thumbnail: snippet?.thumbnails?.default
+          thumbnail: snippet?.thumbnails?.default?.url
         } as VideoModel
-      })
-    } as PlaylistModel
-    return playlistData;
+        return  videoData
+      }),
+      ...response.data
+    } as PlaylistData
   }).catch((error) => {
     return {
       message: 'There was an error',
       error
     }
   })
+}
+
+
+//Get playlist items
+export const getPlaylist = async (playlistId: string, pageToken: string) => {  
+  let playlist = {} as Playlist;
+  try{
+    const playlistInfo = await getPlaylistInfo(playlistId) as PlaylistInfo;
+    const playlistData = await getPlaylistData(playlistId, pageToken) as PlaylistData
+    playlist = {
+      playlistInfo,
+      playlistData
+    }
+    return playlist;
+  }catch(error){
+    console.log(error.message);
+  }
 }
 
