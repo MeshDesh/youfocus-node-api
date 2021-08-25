@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { addFeedbackToDatabase } from '../database-modules';
 import { feedbackModel } from '../interfaces';
-import { getPlaylist, getPlaylistId } from '../utils';
+import { getPlaylist } from '../utils';
 import { errorResponse, successResponse } from '../utils/response';
 
 // 1. Get status of the API
@@ -19,15 +19,13 @@ export const getPlaylistItems = async (
   request: Request,
   response: Response,
 ): Promise<void> => {
-  const { url, pageToken } = request.query;
-
-  var playlistId = getPlaylistId(url as string);
+  const { playlistId, pageToken } = request.query;
 
   if (!playlistId) {
     errorResponse(404, 'Invalid playlist ID', response)
     return
   }
-  getPlaylist(playlistId, pageToken as string)
+  await getPlaylist(playlistId as string, pageToken as string)
     .then(result => {
       successResponse(result, response)
     })

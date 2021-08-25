@@ -13,15 +13,15 @@ const youtube = google.youtube({
   auth: configEnv.YOUTUBE_API_KEY,
 });
 
-//extracting playlist id;
-export const getPlaylistId = (url: string) => {
-  var reg = new RegExp('[&?]list=([a-z0-9_]+)', 'i');
-  var match = reg.exec(url);
+// //extracting playlist id;
+// export const getPlaylistId = (url: string) => {
+//   var reg = new RegExp('[&?]list=([a-z0-9_]+)', 'i');
+//   var match = reg.exec(url);
 
-  if (match && match[1].length > 0) {
-    return match[1];
-  }
-};
+//   if (match && match[1].length > 0) {
+//     return match[1];
+//   }
+// };
 
 const getPlaylistInfo = async (playlistId: string) => {
   return await youtube.playlists
@@ -68,8 +68,7 @@ const getPlaylistData = async (playlistId: string, pageToken: string) => {
             thumbnail: snippet?.thumbnails?.default?.url,
           } as VideoModel;
           return videoData;
-        }),
-        ...response.data,
+        })
       } as PlaylistData;
     })
     .catch(error => {
@@ -82,7 +81,8 @@ const getPlaylistData = async (playlistId: string, pageToken: string) => {
 
 //Get playlist items
 export const getPlaylist = async (playlistId: string, pageToken: string) => {
- 
+  console.log(playlistId)
+
   let playlist = {} as Playlist;
   
   try {
