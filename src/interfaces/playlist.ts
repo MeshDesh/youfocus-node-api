@@ -18,7 +18,6 @@ export interface PlaylistData {
     channelName: string,
     playlistMeta: {
         totalResults: number,
-        resultsPerPage: number
     }
 }
 

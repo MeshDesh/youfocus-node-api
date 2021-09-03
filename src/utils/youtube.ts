@@ -7,21 +7,10 @@ import {
 } from '../interfaces';
 import { google } from 'googleapis';
 
-//youtube api config;
 const youtube = google.youtube({
   version: 'v3',
   auth: configEnv.YOUTUBE_API_KEY,
 });
-
-// //extracting playlist id;
-// export const getPlaylistId = (url: string) => {
-//   var reg = new RegExp('[&?]list=([a-z0-9_]+)', 'i');
-//   var match = reg.exec(url);
-
-//   if (match && match[1].length > 0) {
-//     return match[1];
-//   }
-// };
 
 const getPlaylistInfo = async (playlistId: string) => {
   return await youtube.playlists
@@ -35,7 +24,6 @@ const getPlaylistInfo = async (playlistId: string) => {
       return {
         playlistId,
         playlistName: items![0].snippet?.title!,
-        playlistItemCount: items![0].contentDetails?.itemCount!,
         playlistThumb: items![0].snippet?.thumbnails?.default?.url!,
         playlistDescription: items![0].snippet?.description!,
         channelName: items![0].snippet?.channelTitle!,
@@ -49,6 +37,7 @@ const getPlaylistInfo = async (playlistId: string) => {
 const getPlaylistData = async (playlistId: string, pageToken: string) => {
   return await youtube.playlistItems
     .list({
+      maxResults:25,
       playlistId,
       part: ['snippet', 'id'],
       pageToken,
@@ -79,26 +68,29 @@ const getPlaylistData = async (playlistId: string, pageToken: string) => {
     });
 };
 
-//Get playlist items
 export const getPlaylist = async (playlistId: string, pageToken: string) => {
   console.log(playlistId)
 
   let playlist = {} as Playlist;
-  
+
   try {
 
     const playlistInfo = (await getPlaylistInfo(playlistId)) as PlaylistInfo;
-    
+
     const playlistData = (await getPlaylistData(
       playlistId,
       pageToken,
     )) as PlaylistData;
 
     playlist = {
-      playlistInfo,
+      playlistInfo:
+      {
+        ...playlistInfo,
+        playlistItemCount: playlistData.playlistMeta.totalResults
+      },
       playlistData,
     };
-    
+
     return playlist;
   } catch (error) {
     console.log(error.message);
