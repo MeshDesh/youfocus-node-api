@@ -109,4 +109,5 @@ src/.env.development
 src/.env.production
 src/.env.staging
 src/.env.staging
+src/.env.local
 build
