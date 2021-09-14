@@ -111,3 +111,4 @@ src/.env.staging
 src/.env.staging
 src/.env.local
 build
+src/serviceAccount.json

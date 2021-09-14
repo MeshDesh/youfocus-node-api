@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { addFeedbackToDatabase } from '../database-modules';
+import { addOnboardingData } from '../database-modules/user';
 import { feedbackModel } from '../interfaces';
 import { getPlaylist } from '../utils';
 import { errorResponse, successResponse } from '../utils/response';
@@ -52,6 +53,30 @@ export const postFeedback = async (
   addFeedbackToDatabase(feedbackData)
     .then(result => {
       successResponse(result, response)
+    })
+    .catch(err => {
+      console.log(err)
+      errorResponse(404, 'Some Error Occured', response)
+    });
+};
+
+//3. Post Onboarding Data 
+export const updateUserOnboarding = async (
+  request: Request,
+  response: Response,
+): Promise<void> => {
+  const { user, form } = request.body;
+
+  console.log(form.profession, form.isLearning)
+
+  const onboardingData = {
+    profession: form.profession,
+    isLearning: form.isLearning
+  }
+
+  addOnboardingData(user, onboardingData)
+    .then(result => {
+      successResponse(result!, response)
     })
     .catch(err => {
       console.log(err)

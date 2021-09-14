@@ -1,7 +1,9 @@
 import firebase from 'firebase/app';
+import admin, { ServiceAccount } from 'firebase-admin';
 import 'firebase/firestore';
+import 'firebase/auth'
 import configEnv from '../config';
-
+import serviceAccount from '../serviceAccount.json'
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: configEnv.FIREBASE_API_KEY,
@@ -12,7 +14,13 @@ const firebaseConfig = {
   appId: configEnv.FIREBASE_APP_ID,
 };
 
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount as ServiceAccount)
+})
 
-export { firebase as default };
+export const googleProvider = new firebase.auth.GoogleAuthProvider;
+
+export { firebase as default, admin,  };
