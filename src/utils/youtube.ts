@@ -30,7 +30,10 @@ const getPlaylistInfo = async (playlistId: string) => {
       } as PlaylistInfo;
     })
     .catch(error => {
-      console.log(error);
+      return {
+        message: 'There was an error',
+        error,
+      };
     });
 };
 
@@ -93,6 +96,9 @@ export const getPlaylist = async (playlistId: string, pageToken: string) => {
 
     return playlist;
   } catch (error) {
-    console.log(error.message);
+    return {
+      error,
+      message: 'Playlist not found'
+    }
   }
 };

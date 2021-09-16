@@ -28,4 +28,5 @@ export interface PlaylistInfo{
     playlistDescription: string,
     playlistThumb: string,
     channelName: string
+    recent?: boolean
 }
