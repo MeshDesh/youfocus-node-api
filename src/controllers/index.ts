@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { addFeedbackToDatabase } from '../database-modules';
-import { addOnboardingData, addPlaylistToUser } from '../database-modules/user';
+import { addOnboardingData, addPlaylistToUser, fetchUserPlaylists, removePlaylistFromUser } from '../database-modules/user';
 import { feedbackModel, Playlist } from '../interfaces';
 import { getPlaylist } from '../utils';
 import { errorResponse, successResponse } from '../utils/response';
@@ -18,7 +18,7 @@ export const getPlaylistItems = async (
   }
 
   await getPlaylist(playlistId as string, pageToken as string)
-    .then(result => { 
+    .then(result => {
       successResponse(result, response);
     })
     .catch(err => {
@@ -68,8 +68,57 @@ export const updateUserOnboarding = async (
     .then(result => {
       successResponse(result!, response)
     })
-    .catch(err => {
-      console.log(err)
-      errorResponse(404, 'Some Error Occured', response)
+    .catch(error => {
+      console.log(error)
+      errorResponse(404, 'Server Error', response)
     });
 };
+
+//4. Add Playlist to User Document
+export const addPlaylistToUserDoc = async (
+  request: Request,
+  response: Response,
+): Promise<void> => {
+  const { user, playlist } = request.body;
+
+  addPlaylistToUser(user, playlist)
+    .then(result => {
+      successResponse(result!, response)
+    }).catch(error => {
+      console.log(error)
+      errorResponse(404, 'Server Error', response)
+    })
+}
+
+//5. Fetch User Playlist 
+export const fetchUserPlaylistsFromDoc = async (
+  request: Request,
+  response: Response,
+): Promise<void> => {
+  const { user } = request.body;
+
+  fetchUserPlaylists(user)
+  .then(result => {
+    successResponse(result!, response)
+  }).catch(error => {
+    console.log(error)
+    errorResponse(404, 'Server Error', response)
+  })
+
+}
+
+//6. Remove playlist from user
+export const removePlaylistFromUserDoc = async (
+  request: Request,
+  response: Response,
+): Promise<void> => {
+  const { user, id } = request.body;
+
+  removePlaylistFromUser(user, id)
+    .then(result => {
+      successResponse(result!, response)
+    }).catch(error => {
+      console.log(error)
+      errorResponse(404, 'Server Error', response)
+    })
+}
