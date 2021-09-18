@@ -57,10 +57,10 @@ export const updateUserOnboarding = async (
 ): Promise<void> => {
   const { user, form } = request.body;
 
-  console.log(form.profession, form.isLearning)
+  console.log(form.fieldOfWork, form.isLearning)
 
   const onboardingData = {
-    profession: form.profession,
+    fieldOfWork: form.fieldOfWork,
     isLearning: form.isLearning
   }
 

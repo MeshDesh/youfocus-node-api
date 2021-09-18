@@ -1,5 +1,5 @@
 export interface onboardingData {
-    profession: string,
+    fieldOfWork: string,
     isLearning: boolean
 }
 

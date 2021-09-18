@@ -19,13 +19,13 @@ export const addPlaylistToUser = async (user: user, playlist: PlaylistInfo) => {
     try {
         const userData = await userDBRef.doc(user.email).get();
         const playlists = userData.data()?.userPlaylists
-        const playlistFound = playlists.find(({ playlistId }) => playlistId === playlist.playlistId)
-        if (!playlistFound) {
+        const playlistFound = playlists.find(({playlistId}) => playlistId === playlist.playlistId)
+        if(playlists.length === 0 || !playlistFound){
             await userDBRef.doc(user.email).update({
                 ...user,
                 userPlaylists: firebase.firestore.FieldValue.arrayUnion(playlist)
             })
-        }
+        } 
         return {
             message: 'Playlist Added to User'
         }
