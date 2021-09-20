@@ -1,5 +1,6 @@
 export interface VideoModel {
     id: string,
+    description: string,
     title: string,
     thumbnail: string
 }

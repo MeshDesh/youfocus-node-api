@@ -57,6 +57,7 @@ const getPlaylistData = async (playlistId: string, pageToken: string) => {
           let videoData = {
             id: snippet?.resourceId?.videoId,
             title: snippet?.title,
+            description: snippet?.description,
             thumbnail: snippet?.thumbnails?.default?.url,
           } as VideoModel;
           return videoData;
