@@ -19,9 +19,14 @@ export const getPlaylistItems = async (
 
   await getPlaylist(playlistId as string, pageToken as string)
     .then(result => {
-      successResponse(result, response);
+      if (Object.keys(result).length === 0) {
+        errorResponse(404, 'Playlist Not Found', response)
+      } else {
+        successResponse(result, response);
+      }
     })
     .catch(err => {
+      console.log(err)
       errorResponse(404, err, response);
     });
 };
@@ -98,12 +103,12 @@ export const fetchUserPlaylistsFromDoc = async (
   const { user } = request.body;
 
   fetchUserPlaylists(user)
-  .then(result => {
-    successResponse(result!, response)
-  }).catch(error => {
-    console.log(error)
-    errorResponse(404, 'Server Error', response)
-  })
+    .then(result => {
+      successResponse(result!, response)
+    }).catch(error => {
+      console.log(error)
+      errorResponse(404, 'Server Error', response)
+    })
 
 }
 

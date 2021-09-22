@@ -65,16 +65,12 @@ const getPlaylistData = async (playlistId: string, pageToken: string) => {
       } as PlaylistData;
     })
     .catch(error => {
-      return {
-        message: 'There was an error',
-        error,
-      };
+      console.log(error)
+      return {};
     });
 };
 
 export const getPlaylist = async (playlistId: string, pageToken: string) => {
-  console.log(playlistId)
-
   let playlist = {} as Playlist;
 
   try {
@@ -97,9 +93,7 @@ export const getPlaylist = async (playlistId: string, pageToken: string) => {
 
     return playlist;
   } catch (error) {
-    return {
-      error,
-      message: 'Playlist not found'
-    }
+    console.log(error)
+    return {}
   }
 };
