@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { addFeedbackToDatabase } from '../database-modules';
+import { addPlaylistToCommunity, updatePublicPlaylist } from '../database-modules/community';
 import { addOnboardingData, addPlaylistToUser, fetchUserPlaylists, removePlaylistFromUser } from '../database-modules/user';
 import { feedbackModel, Playlist } from '../interfaces';
 import { getPlaylist } from '../utils';
@@ -126,4 +127,38 @@ export const removePlaylistFromUserDoc = async (
       console.log(error)
       errorResponse(404, 'Server Error', response)
     })
+}
+
+
+export const addPlaylistToPublicDatabase = async (request: Request,
+  response: Response,
+): Promise<void> => {
+  const { playlistForm } = request.body;
+  const { playlistId, category } = playlistForm;
+
+  addPlaylistToCommunity(playlistId, category)
+    .then(result => {
+      successResponse(result!, response)
+    }).catch(error => {
+      console.log(error)
+      errorResponse(404, 'Server Error', response)
+    })
+
+}
+
+export const updatePlaylistInPublicDatabase = async (
+  request: Request,
+  response: Response,
+): Promise<void> => {
+  const { playlistId, playlistInfo } = request.body;
+  console.log(playlistId)
+
+  updatePublicPlaylist(playlistId, playlistInfo)
+    .then(result => {
+      successResponse(result!, response)
+    }).catch(error => {
+      console.log(error)
+      errorResponse(404, 'Server Error', response)
+    })
+
 }
