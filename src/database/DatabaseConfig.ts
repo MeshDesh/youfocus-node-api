@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
+import 'firebase/auth'
 import configEnv from '../config';
-
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: configEnv.FIREBASE_API_KEY,
@@ -12,7 +12,9 @@ const firebaseConfig = {
   appId: configEnv.FIREBASE_APP_ID,
 };
 
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-export { firebase as default };
+
+export { firebase as default};

@@ -30,7 +30,10 @@ const getPlaylistInfo = async (playlistId: string) => {
       } as PlaylistInfo;
     })
     .catch(error => {
-      console.log(error);
+      return {
+        message: 'There was an error',
+        error,
+      };
     });
 };
 
@@ -54,6 +57,7 @@ const getPlaylistData = async (playlistId: string, pageToken: string) => {
           let videoData = {
             id: snippet?.resourceId?.videoId,
             title: snippet?.title,
+            description: snippet?.description,
             thumbnail: snippet?.thumbnails?.default?.url,
           } as VideoModel;
           return videoData;
@@ -61,16 +65,12 @@ const getPlaylistData = async (playlistId: string, pageToken: string) => {
       } as PlaylistData;
     })
     .catch(error => {
-      return {
-        message: 'There was an error',
-        error,
-      };
+      console.log(error)
+      return {};
     });
 };
 
 export const getPlaylist = async (playlistId: string, pageToken: string) => {
-  console.log(playlistId)
-
   let playlist = {} as Playlist;
 
   try {
@@ -93,6 +93,7 @@ export const getPlaylist = async (playlistId: string, pageToken: string) => {
 
     return playlist;
   } catch (error) {
-    console.log(error.message);
+    console.log(error)
+    return {}
   }
 };
